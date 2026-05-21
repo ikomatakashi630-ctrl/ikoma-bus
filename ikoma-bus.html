@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>生駒駅 バス時刻表</title>
+<meta name="description" content="生駒駅 北口1番・南口2番 バス時刻表">
+<meta name="theme-color" content="#1a1f36">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="生駒バス">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6fa;--white:#fff;--border:#e2e6ef;
+  --text:#1a1f36;--muted:#7a85a0;
+  --north:#059669;--north-l:#d1fae5;--north-m:#6ee7b7;
+  --south:#7c3aed;--south-l:#ede9fe;--south-m:#c4b5fd;
+  --r79:#0ea5e9;--r79-l:#e0f2fe;--r79-m:#7dd3fc;
+  --r8596:#e11d48;--r8596-l:#ffe4e6;--r8596-m:#fda4af;
+  --loop:#059669;--loop-l:#d1fae5;--loop-m:#6ee7b7;
+  --kitada:#d97706;--kitada-l:#fef3c7;--kitada-m:#fcd34d;
+  --gakken:#0ea5e9;--gakken-l:#e0f2fe;--gakken-m:#7dd3fc;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Zen Kaku Gothic New',sans-serif;min-height:100vh;}
+.container{max-width:700px;margin:0 auto;padding:14px 12px 56px;}
+
+header{background:var(--white);border-radius:14px;padding:14px 16px;margin-bottom:12px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.header-left h1{font-size:17px;font-weight:900;line-height:1.3;}
+.header-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.clock-block{text-align:right;}
+.clock-time{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;}
+.clock-date{font-size:11px;color:var(--muted);margin-top:2px;}
+
+.day-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.day-btn{padding:10px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:10px;transition:all .18s;}
+.day-btn.active{background:var(--text);border-color:var(--text);color:#fff;}
+
+.stop-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.stop-tab{padding:12px 10px;border:2px solid var(--border);background:var(--white);color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;transition:all .18s;text-align:center;position:relative;overflow:hidden;}
+.stop-tab::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;background:var(--border);transition:background .2s;}
+.stop-tab .ti{font-size:18px;display:block;margin-bottom:3px;}
+.stop-tab .tn{font-size:13px;display:block;font-weight:900;}
+.stop-tab .ts{font-size:10px;color:var(--muted);display:block;margin-top:2px;}
+.stop-tab.active-north{border-color:var(--north);background:#f0fdf8;color:var(--north);}
+.stop-tab.active-north::before{background:var(--north);}
+.stop-tab.active-north .ts{color:var(--north);opacity:.7;}
+.stop-tab.active-south{border-color:var(--south);background:#faf8ff;color:var(--south);}
+.stop-tab.active-south::before{background:var(--south);}
+.stop-tab.active-south .ts{color:var(--south);opacity:.7;}
+
+.upcoming-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.bus-card{border-radius:14px;padding:14px 15px;border:1.5px solid var(--border);background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.bus-card.secondary{background:var(--bg);box-shadow:none;}
+.bus-card.primary.north{border-color:var(--north);}
+.bus-card.primary.south{border-color:var(--south);}
+.card-label{font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:4px;}
+.bus-card.primary.north .card-label{color:var(--north);}
+.bus-card.primary.south .card-label{color:var(--south);}
+.bus-card.secondary .card-label{color:var(--muted);}
+.card-depart{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;line-height:1;margin-bottom:2px;}
+.bus-card.secondary .card-depart{font-size:28px;color:var(--muted);}
+.card-wait{font-size:11px;color:var(--muted);margin-bottom:5px;}
+.card-wait strong{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--text);}
+.bus-card.secondary .card-wait strong{color:var(--muted);}
+.card-dest{font-size:11px;font-weight:700;margin-bottom:4px;}
+.card-route{font-size:10px;color:var(--muted);line-height:1.4;margin-bottom:7px;}
+.arrival-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;}
+.bus-card.primary.north .arrival-pill{background:var(--north-l);color:var(--north);}
+.bus-card.primary.south .arrival-pill{background:var(--south-l);color:var(--south);}
+.bus-card.secondary .arrival-pill{background:var(--border);color:var(--muted);}
+.pill-arr{font-family:'JetBrains Mono',monospace;font-size:13px;}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:9px 13px;margin-bottom:12px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sec-title{font-size:10px;color:var(--muted);letter-spacing:3px;white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+
+.hour-row{display:flex;align-items:flex-start;gap:10px;padding:7px 12px;background:var(--white);border:1px solid var(--border);border-radius:10px;margin-bottom:5px;}
+.hour-lbl{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:var(--muted);min-width:32px;text-align:right;padding-top:6px;}
+.div-line{width:1px;min-height:30px;background:var(--border);flex-shrink:0;align-self:stretch;}
+.minutes{display:flex;flex-wrap:wrap;gap:5px;flex:1;}
+
+.chip{display:flex;flex-direction:column;align-items:center;font-family:'JetBrains Mono',monospace;padding:5px 7px;border-radius:8px;border:1.5px solid transparent;min-width:46px;cursor:default;transition:all .15s;}
+.chip-dep{font-size:13px;font-weight:700;line-height:1;}
+.chip-sub{font-size:9px;margin-top:2px;opacity:.8;font-family:'Zen Kaku Gothic New',sans-serif;text-align:center;line-height:1.2;}
+.chip.t-loop{background:var(--loop-l);color:var(--loop);border-color:var(--loop-m);}
+.chip.t-kitada{background:var(--kitada-l);color:var(--kitada);border-color:var(--kitada-m);}
+.chip.t-gakken{background:var(--gakken-l);color:var(--gakken);border-color:var(--gakken-m);}
+.chip.t-r79{background:var(--r79-l);color:var(--r79);border-color:var(--r79-m);}
+.chip.t-r8596{background:var(--r8596-l);color:var(--r8596);border-color:var(--r8596-m);}
+.chip.t-r8596s{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff;}
+
+.chip.is-next{transform:scale(1.1);animation:cpulse 1.5s ease-in-out infinite;}
+@keyframes cpulse{0%,100%{box-shadow:0 0 0 2px currentColor}50%{box-shadow:0 0 0 5px currentColor}}
+.chip.is-next2{outline:2px dashed currentColor;outline-offset:2px;}
+.chip.past{opacity:.2;}
+.chip:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.1);}
+
+.no-bus{text-align:center;padding:36px;color:var(--muted);font-size:14px;}
+.updated{text-align:center;font-size:10px;color:var(--muted);margin-top:24px;padding-top:12px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-left">
+      <h1 id="hTitle">生駒駅 バス時刻表</h1>
+      <div class="header-sub" id="hSub">のりば選択</div>
+    </div>
+    <div class="clock-block">
+      <div class="clock-time" id="clock">--:--</div>
+      <div class="clock-date" id="dateDisp"></div>
+    </div>
+  </header>
+
+  <div class="day-toggle">
+    <button class="day-btn" id="btnWD" onclick="setDay('weekday')">🗓 平日</button>
+    <button class="day-btn" id="btnWE" onclick="setDay('weekend')">🎉 土曜・日祝</button>
+  </div>
+
+  <div class="stop-tabs">
+    <button class="stop-tab" id="tabNorth" onclick="setStop('north')">
+      <span class="ti">🚌</span>
+      <span class="tn">北口 1番のりば</span>
+      <span class="ts">生駒台循環・北田原・学研</span>
+    </button>
+    <button class="stop-tab" id="tabSouth" onclick="setStop('south')">
+      <span class="ti">🚌</span>
+      <span class="tn">南口 2番のりば</span>
+      <span class="ts">田原台一丁目方面</span>
+    </button>
+  </div>
+
+  <div id="upcoming"></div>
+  <div class="legend" id="legend"></div>
+  <div class="sec-hdr"><div class="sec-title">時刻表</div><div class="sec-line"></div></div>
+  <div id="timetable"></div>
+  <div class="updated" id="revised"></div>
+</div>
+<script>
+// ── 北口1番 データ ──────────────────────────────────────
+// t: loop=生駒台循環外回り(77/84), kitada=北田原(82), gakken=学研北生駒(189)
+const NORTH = {
+  weekday:{
+    5:[],
+    6:[{m:44,t:'loop'},{m:16,t:'kitada'}],
+    7:[{m:0,t:'loop'},{m:9,t:'loop'},{m:19,t:'loop'},{m:24,t:'kitada'},{m:32,t:'loop'},{m:41,t:'loop'},{m:50,t:'kitada'},{m:52,t:'loop'}],
+    8:[{m:5,t:'loop'},{m:23,t:'loop'},{m:41,t:'loop'}],
+    9:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    10:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    11:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    12:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    13:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'},{m:51,t:'kitada'}],
+    14:[{m:11,t:'loop'},{m:41,t:'loop'},{m:51,t:'kitada'}],
+    15:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'},{m:51,t:'kitada'}],
+    16:[{m:2,t:'kitada'},{m:15,t:'loop'},{m:27,t:'loop'},{m:35,t:'kitada'},{m:50,t:'loop'},{m:56,t:'loop'}],
+    17:[{m:2,t:'kitada'},{m:16,t:'loop'},{m:27,t:'loop'},{m:35,t:'kitada'},{m:50,t:'loop'},{m:56,t:'loop'}],
+    18:[{m:10,t:'kitada'},{m:16,t:'loop'},{m:27,t:'loop'},{m:36,t:'kitada'},{m:50,t:'loop'},{m:56,t:'loop'}],
+    19:[{m:10,t:'kitada'},{m:16,t:'loop'},{m:27,t:'loop'},{m:36,t:'kitada'},{m:46,t:'loop'}],
+    20:[{m:10,t:'kitada'},{m:16,t:'loop'},{m:27,t:'loop'},{m:36,t:'kitada'},{m:46,t:'loop'}],
+    21:[{m:1,t:'kitada'},{m:18,t:'gakken'},{m:29,t:'loop'},{m:41,t:'kitada'}],
+    22:[{m:0,t:'loop'},{m:20,t:'loop'},{m:41,t:'loop'}],
+    23:[{m:2,t:'gakken'},{m:17,t:'loop'},{m:42,t:'gakken'}],
+  },
+  weekend:{
+    5:[],
+    6:[{m:47,t:'loop'}],
+    7:[{m:16,t:'loop'},{m:20,t:'kitada'},{m:31,t:'loop'},{m:46,t:'loop'},{m:50,t:'kitada'}],
+    8:[{m:6,t:'loop'},{m:20,t:'kitada'},{m:26,t:'loop'},{m:46,t:'loop'}],
+    9:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    10:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    11:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    12:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    13:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    14:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    15:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    16:[{m:11,t:'loop'},{m:21,t:'kitada'},{m:41,t:'loop'}],
+    17:[{m:2,t:'kitada'},{m:17,t:'loop'},{m:32,t:'kitada'},{m:47,t:'loop'}],
+    18:[{m:2,t:'kitada'},{m:17,t:'loop'},{m:32,t:'kitada'},{m:47,t:'loop'}],
+    19:[{m:2,t:'kitada'},{m:17,t:'loop'},{m:32,t:'kitada'},{m:42,t:'loop'}],
+    20:[{m:3,t:'kitada'},{m:20,t:'loop'},{m:41,t:'kitada'}],
+    21:[{m:5,t:'loop'},{m:19,t:'loop'},{m:41,t:'kitada'}],
+    22:[{m:2,t:'loop'},{m:19,t:'gakken'},{m:41,t:'loop'},{m:59,t:'loop'}],
+    23:[{m:34,t:'gakken'}],
+    24:[],
+  }
+};
+
+// ── 南口2番 データ ──────────────────────────────────────
+// r79=79系統(田原台1丁目 via北谷公園)
+// r8596=85/86系統(田原台1丁目 via田原8丁目) 
+// r8596s=96系統(田原台1丁目 via田原9丁目西経由) ＊印
+const SOUTH = {
+  weekday:{
+    5:[],
+    6:[{m:15,t:'r79'},{m:33,t:'r79'},{m:59,t:'r79'}],
+    7:[{m:6,t:'r8596s'},{m:13,t:'r79'},{m:22,t:'r79'},{m:28,t:'r8596s'},{m:30,t:'r79'},{m:36,t:'r79'},{m:44,t:'r79'},{m:53,t:'r8596'}],
+    8:[{m:2,t:'r79'},{m:10,t:'r79'},{m:20,t:'r79'},{m:25,t:'r79'},{m:32,t:'r79'},{m:40,t:'r8596s'},{m:42,t:'r8596'},{m:50,t:'r79'}],
+    9:[{m:5,t:'r79'},{m:30,t:'r79'},{m:42,t:'r8596s'}],
+    10:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    11:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    12:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    13:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    14:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    15:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    16:[{m:1,t:'r79'},{m:11,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    17:[{m:1,t:'r79'},{m:14,t:'r8596s'},{m:22,t:'r8596'},{m:34,t:'r79'},{m:35,t:'r8596s'},{m:49,t:'r8596'},{m:49,t:'r8596s'},{m:55,t:'r8596'}],
+    18:[{m:9,t:'r79'},{m:15,t:'r8596s'},{m:26,t:'r79'},{m:27,t:'r8596s'},{m:35,t:'r79'},{m:49,t:'r8596'},{m:49,t:'r8596s'},{m:55,t:'r8596'}],
+    19:[{m:9,t:'r8596s'},{m:15,t:'r79'},{m:16,t:'r8596'},{m:26,t:'r8596s'},{m:35,t:'r79'},{m:49,t:'r8596'},{m:49,t:'r8596s'},{m:55,t:'r8596'}],
+    20:[{m:9,t:'r8596s'},{m:10,t:'r79'},{m:15,t:'r8596'},{m:26,t:'r8596s'},{m:28,t:'r8596'},{m:35,t:'r79'},{m:40,t:'r8596'},{m:59,t:'r8596'}],
+    21:[{m:17,t:'r79'},{m:19,t:'r8596s'},{m:28,t:'r8596'}],
+    22:[{m:19,t:'r8596s'},{m:28,t:'r8596s'},{m:40,t:'r8596'}],
+    23:[{m:16,t:'r8596'},{m:41,t:'r8596'}],
+    24:[],
+  },
+  weekend:{
+    5:[],
+    6:[{m:18,t:'r79'},{m:31,t:'r79'}],
+    7:[{m:0,t:'r79'},{m:12,t:'r79'},{m:17,t:'r8596'},{m:26,t:'r79'},{m:35,t:'r79'},{m:42,t:'r8596'},{m:49,t:'r79'}],
+    8:[{m:0,t:'r8596s'},{m:11,t:'r79'},{m:17,t:'r8596'},{m:27,t:'r8596s'},{m:42,t:'r79'},{m:57,t:'r8596s'}],
+    9:[{m:11,t:'r79'},{m:27,t:'r8596s'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    10:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    11:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    12:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    13:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    14:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    15:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:57,t:'r8596s'}],
+    16:[{m:11,t:'r79'},{m:31,t:'r8596s'},{m:50,t:'r8596s'}],
+    17:[{m:1,t:'r79'},{m:16,t:'r8596s'},{m:31,t:'r79'},{m:46,t:'r8596s'}],
+    18:[{m:1,t:'r79'},{m:16,t:'r8596s'},{m:31,t:'r79'},{m:41,t:'r8596s'}],
+    19:[{m:16,t:'r8596s'},{m:40,t:'r8596s'},{m:41,t:'r8596'}],
+    20:[{m:4,t:'r8596s'},{m:18,t:'r79'},{m:40,t:'r8596s'}],
+    21:[{m:2,t:'r8596s'},{m:4,t:'r8596'},{m:18,t:'r79'},{m:40,t:'r8596'}],
+    22:[{m:1,t:'r79'},{m:18,t:'r8596s'},{m:40,t:'r8596'},{m:58,t:'r8596s'}],
+    23:[{m:19,t:'r8596s'}],
+    24:[],
+  }
+};
+
+// ── 凡例設定 ──────────────────────────────────────────
+const LEGENDS = {
+  north:[
+    {t:'loop',color:'var(--loop)',label:'生駒台循環・外回り（77/84系統）'},
+    {t:'kitada',color:'var(--kitada)',label:'北田原行き（82系統）'},
+    {t:'gakken',color:'var(--gakken)',label:'学研北生駒駅行き（189系統）'},
+  ],
+  south:[
+    {t:'r79',color:'var(--r79)',label:'79系統 田原台一丁目（via 北谷公園）'},
+    {t:'r8596',color:'var(--r8596)',label:'85/86系統 田原台一丁目（via 田原八丁目）'},
+    {t:'r8596s',color:'#7e22ce',label:'96系統 田原台一丁目（田原九丁目西経由 ＊）'},
+  ]
+};
+
+const CHIP_LABELS = {
+  loop:'循環',kitada:'北田原',gakken:'学研',
+  r79:'79',r8596:'85/86',r8596s:'96＊'
+};
+
+const STOP_META = {
+  north:{title:'生駒駅 北口 1番のりば',sub:'生駒台循環・北田原・学研北生駒駅 方面',cls:'north',rev:'2025年2月22日 改正'},
+  south:{title:'生駒駅 南口 2番のりば',sub:'田原台一丁目 方面（79/85/86/96系統）',cls:'south',rev:'2025年2月22日 改正'},
+};
+
+let cDay = 'weekday', cStop = 'north';
+
+function pad(n){return String(n).padStart(2,'0');}
+function toM(h,m){return h*60+m;}
+function getNow(){const n=new Date();return{h:n.getHours(),m:n.getMinutes()};}
+function autoDay(){const d=new Date().getDay();return(d===0||d===6)?'weekend':'weekday';}
+
+function setDay(d){
+  cDay=d;
+  document.getElementById('btnWD').className='day-btn'+(d==='weekday'?' active':'');
+  document.getElementById('btnWE').className='day-btn'+(d==='weekend'?' active':'');
+  render();
+}
+function setStop(s){
+  cStop=s;
+  document.getElementById('tabNorth').className='stop-tab'+(s==='north'?' active-north':'');
+  document.getElementById('tabSouth').className='stop-tab'+(s==='south'?' active-south':'');
+  render();
+}
+
+function getData(){return cStop==='north'?NORTH[cDay]:SOUTH[cDay];}
+
+function getUpcoming(n=2){
+  const{h,m}=getNow();const nm=toM(h,m);
+  const data=getData();const all=[];
+  for(const[hour,slots] of Object.entries(data)){
+    const hr=parseInt(hour);
+    for(const s of slots){
+      const sm=toM(hr,s.m);
+      if(sm>nm) all.push({h:hr,m:s.m,t:s.t,wait:sm-nm,sm});
+    }
+  }
+  all.sort((a,b)=>a.sm-b.sm);
+  return all.slice(0,n);
+}
+
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}`;
+  const days=['日','月','火','水','木','金','土'];
+  document.getElementById('dateDisp').textContent=
+    `${n.getFullYear()}/${pad(n.getMonth()+1)}/${pad(n.getDate())}（${days[n.getDay()]}）`;
+}
+
+function render(){
+  const meta=STOP_META[cStop];
+  const cls=meta.cls;
+  document.getElementById('hTitle').textContent=meta.title;
+  document.getElementById('hSub').textContent=meta.sub;
+  document.getElementById('revised').textContent=meta.rev;
+
+  // 凡例
+  const leg=LEGENDS[cStop];
+  document.getElementById('legend').innerHTML=leg.map(l=>
+    `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.label}</div>`
+  ).join('');
+
+  const{h:nh,m:nm}=getNow();const nowMs=toM(nh,nm);
+  const upcoming=getUpcoming(2);
+
+  // 次の便カード
+  const nb=document.getElementById('upcoming');
+  if(!upcoming.length){
+    nb.innerHTML=`<div class="bus-card primary ${cls}" style="text-align:center;color:var(--muted);padding:20px;margin-bottom:14px;font-size:14px;">本日の運行は終了しました</div>`;
+  } else {
+    const labels=['▶ 次の便','▷ 次々の便'];
+    let html='<div class="upcoming-grid">';
+    for(let i=0;i<2;i++){
+      const b=upcoming[i];
+      if(!b){
+        html+=`<div class="bus-card secondary" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;min-height:110px;">最終便</div>`;
+        continue;
+      }
+      const cc=i===0?`bus-card primary ${cls}`:'bus-card secondary';
+      const destMap={
+        loop:'生駒台循環（外回り）',kitada:'北田原',gakken:'学研北生駒駅',
+        r79:'田原台一丁目',r8596:'田原台一丁目',r8596s:'田原台一丁目'
+      };
+      const routeMap={
+        loop:'77/84系統 via 新生駒台北口',kitada:'82系統 via 新生駒台北口',gakken:'189系統',
+        r79:'79系統 via 北谷公園',r8596:'85/86系統 via 田原八丁目',r8596s:'96系統 ＊田原九丁目西経由'
+      };
+      html+=`<div class="${cc}">
+        <div class="card-label">${labels[i]}</div>
+        <div class="card-depart">${pad(b.h)}:${pad(b.m)}</div>
+        <div class="card-wait"><strong>${b.wait}</strong> 分後</div>
+        <div class="card-dest">${destMap[b.t]||''}</div>
+        <div class="card-route">${routeMap[b.t]||''}</div>
+      </div>`;
+    }
+    html+='</div>';
+    nb.innerHTML=html;
+  }
+
+  // 時刻表
+  const data=getData();
+  const next1=upcoming[0],next2=upcoming[1];
+  const cont=document.getElementById('timetable');
+  let html='';let hasAny=false;
+  const hours=Object.keys(data).map(Number).sort((a,b)=>a-b);
+  for(const hour of hours){
+    const slots=[...data[hour]].sort((a,b)=>a.m-b.m);
+    if(!slots.length) continue;
+    hasAny=true;
+    const chips=slots.map(s=>{
+      const sm=toM(hour,s.m);
+      const isPast=sm<nowMs;
+      const isN1=next1&&next1.h===hour&&next1.m===s.m&&next1.t===s.t;
+      const isN2=!isN1&&next2&&next2.h===hour&&next2.m===s.m&&next2.t===s.t;
+      return `<div class="chip t-${s.t}${isPast?' past':''}${isN1?' is-next':''}${isN2?' is-next2':''}">
+        <span class="chip-dep">${pad(s.m)}</span>
+        <span class="chip-sub">${CHIP_LABELS[s.t]||''}</span>
+      </div>`;
+    }).join('');
+    html+=`<div class="hour-row">
+      <div class="hour-lbl">${pad(hour)}</div>
+      <div class="div-line"></div>
+      <div class="minutes">${chips}</div>
+    </div>`;
+  }
+  cont.innerHTML=hasAny?html:`<div class="no-bus">該当する便がありません</div>`;
+}
+
+// PWA Service Worker登録
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+// Init
+setDay(autoDay());
+setStop('north');
+updateClock();
+setInterval(()=>{updateClock();render();},10000);
+</script>
+</body>
+</html>
