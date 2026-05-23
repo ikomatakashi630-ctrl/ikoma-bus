@@ -4,116 +4,116 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>生駒駅 バス時刻表</title>
-<meta name="description" content="生駒駅 北口1番・南口2番 バス時刻表">
 <meta name="theme-color" content="#1a1f36">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="生駒バス">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f4f6fa;--white:#fff;--border:#e2e6ef;
   --text:#1a1f36;--muted:#7a85a0;
-  --north:#059669;--north-l:#d1fae5;--north-m:#6ee7b7;
-  --south:#7c3aed;--south-l:#ede9fe;--south-m:#c4b5fd;
-  --r79:#0ea5e9;--r79-l:#e0f2fe;--r79-m:#7dd3fc;
-  --r8596:#e11d48;--r8596-l:#ffe4e6;--r8596-m:#fda4af;
+  --north:#059669;--north-l:#d1fae5;
+  --south:#7c3aed;--south-l:#ede9fe;
   --loop:#059669;--loop-l:#d1fae5;--loop-m:#6ee7b7;
   --kitada:#d97706;--kitada-l:#fef3c7;--kitada-m:#fcd34d;
   --gakken:#0ea5e9;--gakken-l:#e0f2fe;--gakken-m:#7dd3fc;
+  --r79:#0ea5e9;--r79-l:#e0f2fe;--r79-m:#7dd3fc;
+  --r8596:#e11d48;--r8596-l:#ffe4e6;--r8596-m:#fda4af;
+  --r8596s:#7e22ce;--r8596s-l:#fdf4ff;--r8596s-m:#e9d5ff;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Zen Kaku Gothic New',sans-serif;min-height:100vh;}
-.container{max-width:700px;margin:0 auto;padding:14px 12px 56px;}
+.container{max-width:520px;margin:0 auto;padding:14px 12px 56px;}
 
 header{background:var(--white);border-radius:14px;padding:14px 16px;margin-bottom:12px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.06);}
-.header-left h1{font-size:17px;font-weight:900;line-height:1.3;}
+.header-left h1{font-size:17px;font-weight:900;}
 .header-sub{font-size:11px;color:var(--muted);margin-top:2px;}
 .clock-block{text-align:right;}
 .clock-time{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;}
 .clock-date{font-size:11px;color:var(--muted);margin-top:2px;}
 
-.day-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.day-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
 .day-btn{padding:10px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:10px;transition:all .18s;}
 .day-btn.active{background:var(--text);border-color:var(--text);color:#fff;}
 
-.stop-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-.stop-tab{padding:12px 10px;border:2px solid var(--border);background:var(--white);color:var(--muted);font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px;transition:all .18s;text-align:center;position:relative;overflow:hidden;}
-.stop-tab::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;background:var(--border);transition:background .2s;}
-.stop-tab .ti{font-size:18px;display:block;margin-bottom:3px;}
-.stop-tab .tn{font-size:13px;display:block;font-weight:900;}
-.stop-tab .ts{font-size:10px;color:var(--muted);display:block;margin-top:2px;}
-.stop-tab.active-north{border-color:var(--north);background:#f0fdf8;color:var(--north);}
-.stop-tab.active-north::before{background:var(--north);}
-.stop-tab.active-north .ts{color:var(--north);opacity:.7;}
-.stop-tab.active-south{border-color:var(--south);background:#faf8ff;color:var(--south);}
-.stop-tab.active-south::before{background:var(--south);}
-.stop-tab.active-south .ts{color:var(--south);opacity:.7;}
+/* 次の便カード */
+/* 次の便リスト */
+.upcoming-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.upc-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;}
+.upc-row.primary{border-color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.upc-row.secondary{background:var(--bg);}
+.upc-label{font-size:10px;font-weight:700;color:var(--muted);min-width:52px;}
+.upc-time{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;line-height:1;min-width:72px;}
+.upc-row.primary .upc-time{font-size:32px;}
+.upc-row.secondary .upc-time{color:var(--muted);}
+.upc-wait{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);min-width:68px;text-align:right;}
+.upc-row.primary .upc-wait{color:var(--text);font-size:13px;}
+.upc-noriba{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:900;width:30px;height:30px;border-radius:6px;flex-shrink:0;}
+.upc-noriba.north{background:var(--north);color:#fff;}
+.upc-noriba.north2{background:#2563eb;color:#fff;}
+.upc-noriba.south{background:var(--south);color:#fff;}
+.upc-noriba.secondary-badge{background:var(--border);color:var(--muted);}
+.upc-info{flex:1;min-width:0;}
+.upc-dest{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.upc-route{font-size:10px;color:var(--muted);}
 
-.upcoming-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.bus-card{border-radius:14px;padding:14px 15px;border:1.5px solid var(--border);background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.06);}
-.bus-card.secondary{background:var(--bg);box-shadow:none;}
-.bus-card.primary.north{border-color:var(--north);}
-.bus-card.primary.south{border-color:var(--south);}
-.card-label{font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:4px;}
-.bus-card.primary.north .card-label{color:var(--north);}
-.bus-card.primary.south .card-label{color:var(--south);}
-.bus-card.secondary .card-label{color:var(--muted);}
-.card-depart{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;line-height:1;margin-bottom:2px;}
-.bus-card.secondary .card-depart{font-size:28px;color:var(--muted);}
-.card-wait{font-size:11px;color:var(--muted);margin-bottom:5px;}
-.card-wait strong{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--text);}
-.bus-card.secondary .card-wait strong{color:var(--muted);}
-.card-dest{font-size:11px;font-weight:700;margin-bottom:4px;}
-.card-route{font-size:10px;color:var(--muted);line-height:1.4;margin-bottom:7px;}
-.arrival-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;}
-.bus-card.primary.north .arrival-pill{background:var(--north-l);color:var(--north);}
-.bus-card.primary.south .arrival-pill{background:var(--south-l);color:var(--south);}
-.bus-card.secondary .arrival-pill{background:var(--border);color:var(--muted);}
-.pill-arr{font-family:'JetBrains Mono',monospace;font-size:13px;}
+/* カード類（後方互換用に残すが非表示） */
+.bus-card{display:none;}
 
-.legend{display:flex;flex-wrap:wrap;gap:8px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:9px 13px;margin-bottom:12px;}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);}
-.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+/* 凡例 */
+.legend{display:flex;flex-wrap:wrap;gap:7px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:9px 13px;margin-bottom:12px;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.legend-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
 
+/* 時刻表 */
 .sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .sec-title{font-size:10px;color:var(--muted);letter-spacing:3px;white-space:nowrap;}
 .sec-line{flex:1;height:1px;background:var(--border);}
 
-.hour-row{display:flex;align-items:flex-start;gap:10px;padding:7px 12px;background:var(--white);border:1px solid var(--border);border-radius:10px;margin-bottom:5px;}
-.hour-lbl{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:var(--muted);min-width:32px;text-align:right;padding-top:6px;}
-.div-line{width:1px;min-height:30px;background:var(--border);flex-shrink:0;align-self:stretch;}
-.minutes{display:flex;flex-wrap:wrap;gap:5px;flex:1;}
+.hour-row{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:6px;overflow:hidden;}
+.hour-label-row{display:flex;align-items:center;padding:6px 12px;border-bottom:1px solid var(--border);background:#f8f9fc;}
+.hour-lbl{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--muted);min-width:28px;}
+.hour-count{font-size:10px;color:var(--muted);margin-left:8px;}
+.bus-rows{padding:6px 10px;display:flex;flex-direction:column;gap:5px;}
 
-.chip{display:flex;flex-direction:column;align-items:center;font-family:'JetBrains Mono',monospace;padding:5px 7px;border-radius:8px;border:1.5px solid transparent;min-width:46px;cursor:default;transition:all .15s;}
-.chip-dep{font-size:13px;font-weight:700;line-height:1;}
-.chip-sub{font-size:9px;margin-top:2px;opacity:.8;font-family:'Zen Kaku Gothic New',sans-serif;text-align:center;line-height:1.2;}
-.chip.t-loop{background:var(--loop-l);color:var(--loop);border-color:var(--loop-m);}
-.chip.t-kitada{background:var(--kitada-l);color:var(--kitada);border-color:var(--kitada-m);}
-.chip.t-gakken{background:var(--gakken-l);color:var(--gakken);border-color:var(--gakken-m);}
-.chip.t-r79{background:var(--r79-l);color:var(--r79);border-color:var(--r79-m);}
-.chip.t-r8596{background:var(--r8596-l);color:var(--r8596);border-color:var(--r8596-m);}
-.chip.t-r8596s{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff;}
+/* 1便ごとの行 */
+.bus-row{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:background .15s;}
+.bus-row:hover{background:var(--bg);}
+.bus-row.is-next{background:var(--bg);outline:2px solid var(--text);animation:rowpulse 1.5s ease-in-out infinite;}
+@keyframes rowpulse{0%,100%{outline-color:var(--text)}50%{outline-color:#7a85a0}}
+.bus-row.is-next2{background:var(--bg);outline:2px dashed var(--border);}
+.bus-row.is-next3{background:var(--bg);outline:1px dashed var(--border);opacity:.8;}
+.bus-row.past{opacity:.22;}
 
-.chip.is-next{transform:scale(1.1);animation:cpulse 1.5s ease-in-out infinite;}
-@keyframes cpulse{0%,100%{box-shadow:0 0 0 2px currentColor}50%{box-shadow:0 0 0 5px currentColor}}
-.chip.is-next2{outline:2px dashed currentColor;outline-offset:2px;}
-.chip.past{opacity:.2;}
-.chip:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.1);}
+.row-time{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;min-width:52px;}
+.row-noriba{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:900;width:36px;height:36px;border-radius:8px;flex-shrink:0;}
+.row-noriba.north{background:var(--north);color:#fff;}
+.row-noriba.south{background:var(--south);color:#fff;}
+.row-info{flex:1;min-width:0;}
+.row-dest{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.row-route{font-size:10px;color:var(--muted);margin-top:1px;}
+.row-type{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;margin-top:3px;}
 
-.no-bus{text-align:center;padding:36px;color:var(--muted);font-size:14px;}
-.updated{text-align:center;font-size:10px;color:var(--muted);margin-top:24px;padding-top:12px;border-top:1px solid var(--border);}
+.t-loop .row-type{background:var(--loop-l);color:var(--loop);}
+.t-kitada .row-type{background:var(--kitada-l);color:var(--kitada);}
+.t-gakken .row-type{background:var(--gakken-l);color:var(--gakken);}
+.t-r79 .row-type{background:var(--r79-l);color:var(--r79);}
+.t-r8596 .row-type{background:var(--r8596-l);color:var(--r8596);}
+.t-r8596s .row-type{background:var(--r8596s-l);color:var(--r8596s);}
+
+.no-bus{text-align:center;padding:36px;color:var(--muted);}
+.updated{text-align:center;font-size:10px;color:var(--muted);margin-top:20px;padding-top:12px;border-top:1px solid var(--border);}
 </style>
 </head>
 <body>
 <div class="container">
   <header>
     <div class="header-left">
-      <h1 id="hTitle">生駒駅 バス時刻表</h1>
-      <div class="header-sub" id="hSub">のりば選択</div>
+      <h1>生駒駅 バス時刻表</h1>
+      <div class="header-sub">北口1番・南口2番 合わせて表示</div>
     </div>
     <div class="clock-block">
       <div class="clock-time" id="clock">--:--</div>
@@ -126,29 +126,25 @@ header{background:var(--white);border-radius:14px;padding:14px 16px;margin-botto
     <button class="day-btn" id="btnWE" onclick="setDay('weekend')">🎉 土曜・日祝</button>
   </div>
 
-  <div class="stop-tabs">
-    <button class="stop-tab" id="tabNorth" onclick="setStop('north')">
-      <span class="ti">🚌</span>
-      <span class="tn">北口 1番のりば</span>
-      <span class="ts">生駒台循環・北田原・学研</span>
-    </button>
-    <button class="stop-tab" id="tabSouth" onclick="setStop('south')">
-      <span class="ti">🚌</span>
-      <span class="tn">南口 2番のりば</span>
-      <span class="ts">田原台一丁目方面</span>
-    </button>
+  <div id="upcoming"></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--north);border-radius:4px;width:22px;height:14px;font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;">1</div>北口1番</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--south);border-radius:4px;width:22px;height:14px;font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;">2</div>南口2番</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--loop)"></div>循環(77/84)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--kitada)"></div>北田原(82)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--gakken)"></div>学研(189)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--r79)"></div>79系統</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--r8596)"></div>85/86系統</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--r8596s)"></div>96系統＊</div>
   </div>
 
-  <div id="upcoming"></div>
-  <div class="legend" id="legend"></div>
   <div class="sec-hdr"><div class="sec-title">時刻表</div><div class="sec-line"></div></div>
   <div id="timetable"></div>
-  <div class="updated" id="revised"></div>
+  <div class="updated">北口1番 2025年2月22日改正 / 南口2番 2025年2月22日改正</div>
 </div>
 <script>
-// ── 北口1番 データ ──────────────────────────────────────
-// t: loop=生駒台循環外回り(77/84), kitada=北田原(82), gakken=学研北生駒(189)
-const NORTH = {
+const NORTH={
   weekday:{
     5:[],
     6:[{m:44,t:'loop'},{m:16,t:'kitada'}],
@@ -193,12 +189,54 @@ const NORTH = {
     24:[],
   }
 };
+// ＊印 = 新生駒台北口止め(80系統)
+const NORTH2={
+  weekday:{
+    5:[],
+    6:[{m:28,t:'n2loop'},{m:59,t:'n2loop'}],
+    7:[{m:19,t:'n2loop'},{m:25,t:'n2loop'},{m:31,t:'n2loop'},{m:40,t:'n2loop'},{m:46,t:'n2loop'}],
+    8:[{m:1,t:'n2loop'},{m:13,t:'n2loop'},{m:32,t:'n2loop'},{m:55,t:'n2loop'}],
+    9:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    10:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    11:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    12:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    13:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    14:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    15:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    16:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    17:[{m:2,t:'n2loop'},{m:35,t:'n2loop'}],
+    18:[{m:10,t:'n2loop'},{m:36,t:'n2s'}],
+    19:[{m:10,t:'n2loop'},{m:36,t:'n2loop'}],
+    20:[{m:10,t:'n2loop'},{m:36,t:'n2loop'}],
+    21:[{m:1,t:'n2loop'},{m:18,t:'n2loop'},{m:41,t:'n2loop'}],
+    22:[],
+    23:[{m:2,t:'n2s'},{m:42,t:'n2loop'}],
+  },
+  weekend:{
+    5:[],
+    6:[{m:51,t:'n2loop'}],
+    7:[{m:36,t:'n2loop'}],
+    8:[{m:6,t:'n2loop'},{m:36,t:'n2loop'}],
+    9:[{m:6,t:'n2loop'},{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    10:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    11:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    12:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    13:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    14:[{m:26,t:'n2loop'},{m:56,t:'n2loop'}],
+    15:[{m:26,t:'n2loop'}],
+    16:[{m:26,t:'n2loop'}],
+    17:[{m:2,t:'n2loop'},{m:32,t:'n2loop'}],
+    18:[{m:2,t:'n2loop'},{m:32,t:'n2loop'}],
+    19:[{m:2,t:'n2loop'},{m:32,t:'n2loop'}],
+    20:[{m:20,t:'n2loop'},{m:41,t:'n2loop'}],
+    21:[{m:41,t:'n2loop'}],
+    22:[{m:19,t:'n2loop'}],
+    23:[],
+    24:[],
+  }
+};
 
-// ── 南口2番 データ ──────────────────────────────────────
-// r79=79系統(田原台1丁目 via北谷公園)
-// r8596=85/86系統(田原台1丁目 via田原8丁目) 
-// r8596s=96系統(田原台1丁目 via田原9丁目西経由) ＊印
-const SOUTH = {
+const SOUTH={
   weekday:{
     5:[],
     6:[{m:15,t:'r79'},{m:33,t:'r79'},{m:59,t:'r79'}],
@@ -245,35 +283,16 @@ const SOUTH = {
   }
 };
 
-// ── 凡例設定 ──────────────────────────────────────────
-const LEGENDS = {
-  north:[
-    {t:'loop',color:'var(--loop)',label:'生駒台循環・外回り（77/84系統）'},
-    {t:'kitada',color:'var(--kitada)',label:'北田原行き（82系統）'},
-    {t:'gakken',color:'var(--gakken)',label:'学研北生駒駅行き（189系統）'},
-  ],
-  south:[
-    {t:'r79',color:'var(--r79)',label:'79系統 田原台一丁目（via 北谷公園）'},
-    {t:'r8596',color:'var(--r8596)',label:'85/86系統 田原台一丁目（via 田原八丁目）'},
-    {t:'r8596s',color:'#7e22ce',label:'96系統 田原台一丁目（田原九丁目西経由 ＊）'},
-  ]
-};
+const DEST={loop:'生駒台循環（外回り）',kitada:'北田原',gakken:'学研北生駒駅',n2loop:'生駒台循環（内回り）',n2s:'新生駒台北口止め',r79:'田原台一丁目',r8596:'田原台一丁目',r8596s:'田原台一丁目'};
+const ROUTE={loop:'77/84系統',kitada:'82系統',gakken:'189系統',n2loop:'78/80系統',n2s:'80系統 新生駒台北口止め',r79:'79系統 via 北谷公園',r8596:'85/86系統 via 田原八丁目',r8596s:'96系統＊ 田原九丁目西経由'};
+const CHIP={loop:'外回り',kitada:'北田原',gakken:'学研',n2loop:'内回り',n2s:'内回り＊',r79:'79',r8596:'85/86',r8596s:'96＊'};
 
-const CHIP_LABELS = {
-  loop:'循環',kitada:'北田原',gakken:'学研',
-  r79:'79',r8596:'85/86',r8596s:'96＊'
-};
-
-const STOP_META = {
-  north:{title:'生駒駅 北口 1番のりば',sub:'生駒台循環・北田原・学研北生駒駅 方面',cls:'north',rev:'2025年2月22日 改正'},
-  south:{title:'生駒駅 南口 2番のりば',sub:'田原台一丁目 方面（79/85/86/96系統）',cls:'south',rev:'2025年2月22日 改正'},
-};
-
-let cDay = 'weekday', cStop = 'north';
+let cDay='weekday';
 
 function pad(n){return String(n).padStart(2,'0');}
 function toM(h,m){return h*60+m;}
-function getNow(){const n=new Date();return{h:n.getHours(),m:n.getMinutes()};}
+function getNow(){const n=new Date();return{h:n.getHours(),m:n.getMinutes(),s:n.getSeconds()};}
+function getNowSec(){const n=new Date();return n.getHours()*3600+n.getMinutes()*60+n.getSeconds();}
 function autoDay(){const d=new Date().getDay();return(d===0||d===6)?'weekend':'weekday';}
 
 function setDay(d){
@@ -282,27 +301,108 @@ function setDay(d){
   document.getElementById('btnWE').className='day-btn'+(d==='weekend'?' active':'');
   render();
 }
-function setStop(s){
-  cStop=s;
-  document.getElementById('tabNorth').className='stop-tab'+(s==='north'?' active-north':'');
-  document.getElementById('tabSouth').className='stop-tab'+(s==='south'?' active-south':'');
-  render();
+
+// 全便を時刻順に混合
+function mergeAll(){
+  const all=[];
+  const nd=NORTH[cDay], n2d=NORTH2[cDay], sd=SOUTH[cDay];
+  const addSlots=(data,stop)=>{
+    for(const[hour,slots] of Object.entries(data)){
+      const hr=parseInt(hour);
+      for(const s of slots) all.push({h:hr,m:s.m,t:s.t,stop,sm:toM(hr,s.m)});
+    }
+  };
+  addSlots(nd,'north');
+  addSlots(n2d,'north2');
+  addSlots(sd,'south');
+  all.sort((a,b)=>a.sm-b.sm||a.stop.localeCompare(b.stop));
+  return all;
 }
 
-function getData(){return cStop==='north'?NORTH[cDay]:SOUTH[cDay];}
-
-function getUpcoming(n=2){
-  const{h,m}=getNow();const nm=toM(h,m);
-  const data=getData();const all=[];
-  for(const[hour,slots] of Object.entries(data)){
-    const hr=parseInt(hour);
-    for(const s of slots){
-      const sm=toM(hr,s.m);
-      if(sm>nm) all.push({h:hr,m:s.m,t:s.t,wait:sm-nm,sm});
-    }
+function getUpcoming(all,n=3){
+  const ns=getNowSec();
+  const future=all.filter(b=>b.sm*60>ns);
+  const deduped=[];
+  for(const item of future){
+    if(!deduped.length||deduped[deduped.length-1].sm!==item.sm) deduped.push(item);
   }
-  all.sort((a,b)=>a.sm-b.sm);
-  return all.slice(0,n);
+  return deduped.slice(0,n).map(b=>{
+    const rem=b.sm*60-ns;
+    b.waitMin=Math.floor(rem/60);
+    b.waitSec=rem%60;
+    return b;
+  });
+}
+
+function render(){
+  const{h:nh,m:nm}=getNow();const nowMs=toM(nh,nm);
+  const all=mergeAll();
+  const upcoming=getUpcoming(all,3);
+  const next1=upcoming[0],next2=upcoming[1],next3=upcoming[2];
+
+  // 次の便カード
+  const labels=['▶ 次','▷ 次々','▸ 次々々'];
+  let upHtml='<div class="upcoming-list">';
+  for(let i=0;i<3;i++){
+    const b=upcoming[i];
+    if(!b){
+      upHtml+=`<div class="upc-row secondary"><div class="upc-label">${labels[i]}</div><div class="upc-time" style="font-size:16px;color:var(--muted);">最終便</div></div>`;
+      continue;
+    }
+    const noribaNum=b.stop==='north'?'1北':b.stop==='north2'?'2北':'2南';
+    const noribaLabel=b.stop==='north'?'北口1番':b.stop==='north2'?'北口2番':'南口2番';
+    const cc=i===0?'upc-row primary':'upc-row secondary';
+    const badgeCls=i===0?b.stop:'secondary-badge';
+    upHtml+=`<div class="${cc}">
+      <div class="upc-label">${labels[i]}</div>
+      <div class="upc-time">${pad(b.h)}:${pad(b.m)}</div>
+      <div class="upc-noriba ${badgeCls}" title="${noribaLabel}">${noribaNum}</div>
+      <div class="upc-info">
+        <div class="upc-dest">${DEST[b.t]||''}</div>
+        <div class="upc-route">${ROUTE[b.t]||''}</div>
+      </div>
+      <div class="upc-wait">${b.waitMin}分${pad(b.waitSec)}秒</div>
+    </div>`;
+  }
+  upHtml+='</div>';
+  document.getElementById('upcoming').innerHTML=upHtml;
+
+  // 時刻表（時間ごとにグループ）
+  const byHour={};
+  for(const b of all){
+    if(!byHour[b.h]) byHour[b.h]=[];
+    byHour[b.h].push(b);
+  }
+  const hours=Object.keys(byHour).map(Number).sort((a,b)=>a-b);
+  let html='';
+  for(const hour of hours){
+    const slots=byHour[hour];
+    if(!slots.length) continue;
+    const rows=slots.map(b=>{
+      const isPast=b.sm<nowMs;
+      const isN1=next1&&next1.sm===b.sm&&next1.stop===b.stop&&next1.t===b.t;
+      const isN2=!isN1&&next2&&next2.sm===b.sm&&next2.stop===b.stop&&next2.t===b.t;
+      const isN3=!isN1&&!isN2&&next3&&next3.sm===b.sm&&next3.stop===b.stop&&next3.t===b.t;
+      const noribaNum=b.stop==='north'?'1':'2';
+      return `<div class="bus-row t-${b.t}${isPast?' past':''}${isN1?' is-next':''}${isN2?' is-next2':''}${isN3?' is-next3':''}">
+        <div class="row-time">${pad(b.m)}</div>
+        <div class="row-noriba ${b.stop}">${noribaNum}</div>
+        <div class="row-info">
+          <div class="row-dest">${DEST[b.t]||''}</div>
+          <div class="row-route">${ROUTE[b.t]||''}</div>
+          <span class="row-type">${CHIP[b.t]||''}</span>
+        </div>
+      </div>`;
+    }).join('');
+    html+=`<div class="hour-row">
+      <div class="hour-label-row">
+        <div class="hour-lbl">${pad(hour)}</div>
+        <div class="hour-count">${slots.length}便</div>
+      </div>
+      <div class="bus-rows">${rows}</div>
+    </div>`;
+  }
+  document.getElementById('timetable').innerHTML=html||'<div class="no-bus">該当する便がありません</div>';
 }
 
 function updateClock(){
@@ -313,97 +413,13 @@ function updateClock(){
     `${n.getFullYear()}/${pad(n.getMonth()+1)}/${pad(n.getDate())}（${days[n.getDay()]}）`;
 }
 
-function render(){
-  const meta=STOP_META[cStop];
-  const cls=meta.cls;
-  document.getElementById('hTitle').textContent=meta.title;
-  document.getElementById('hSub').textContent=meta.sub;
-  document.getElementById('revised').textContent=meta.rev;
-
-  // 凡例
-  const leg=LEGENDS[cStop];
-  document.getElementById('legend').innerHTML=leg.map(l=>
-    `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.label}</div>`
-  ).join('');
-
-  const{h:nh,m:nm}=getNow();const nowMs=toM(nh,nm);
-  const upcoming=getUpcoming(2);
-
-  // 次の便カード
-  const nb=document.getElementById('upcoming');
-  if(!upcoming.length){
-    nb.innerHTML=`<div class="bus-card primary ${cls}" style="text-align:center;color:var(--muted);padding:20px;margin-bottom:14px;font-size:14px;">本日の運行は終了しました</div>`;
-  } else {
-    const labels=['▶ 次の便','▷ 次々の便'];
-    let html='<div class="upcoming-grid">';
-    for(let i=0;i<2;i++){
-      const b=upcoming[i];
-      if(!b){
-        html+=`<div class="bus-card secondary" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;min-height:110px;">最終便</div>`;
-        continue;
-      }
-      const cc=i===0?`bus-card primary ${cls}`:'bus-card secondary';
-      const destMap={
-        loop:'生駒台循環（外回り）',kitada:'北田原',gakken:'学研北生駒駅',
-        r79:'田原台一丁目',r8596:'田原台一丁目',r8596s:'田原台一丁目'
-      };
-      const routeMap={
-        loop:'77/84系統 via 新生駒台北口',kitada:'82系統 via 新生駒台北口',gakken:'189系統',
-        r79:'79系統 via 北谷公園',r8596:'85/86系統 via 田原八丁目',r8596s:'96系統 ＊田原九丁目西経由'
-      };
-      html+=`<div class="${cc}">
-        <div class="card-label">${labels[i]}</div>
-        <div class="card-depart">${pad(b.h)}:${pad(b.m)}</div>
-        <div class="card-wait"><strong>${b.wait}</strong> 分後</div>
-        <div class="card-dest">${destMap[b.t]||''}</div>
-        <div class="card-route">${routeMap[b.t]||''}</div>
-      </div>`;
-    }
-    html+='</div>';
-    nb.innerHTML=html;
-  }
-
-  // 時刻表
-  const data=getData();
-  const next1=upcoming[0],next2=upcoming[1];
-  const cont=document.getElementById('timetable');
-  let html='';let hasAny=false;
-  const hours=Object.keys(data).map(Number).sort((a,b)=>a-b);
-  for(const hour of hours){
-    const slots=[...data[hour]].sort((a,b)=>a.m-b.m);
-    if(!slots.length) continue;
-    hasAny=true;
-    const chips=slots.map(s=>{
-      const sm=toM(hour,s.m);
-      const isPast=sm<nowMs;
-      const isN1=next1&&next1.h===hour&&next1.m===s.m&&next1.t===s.t;
-      const isN2=!isN1&&next2&&next2.h===hour&&next2.m===s.m&&next2.t===s.t;
-      return `<div class="chip t-${s.t}${isPast?' past':''}${isN1?' is-next':''}${isN2?' is-next2':''}">
-        <span class="chip-dep">${pad(s.m)}</span>
-        <span class="chip-sub">${CHIP_LABELS[s.t]||''}</span>
-      </div>`;
-    }).join('');
-    html+=`<div class="hour-row">
-      <div class="hour-lbl">${pad(hour)}</div>
-      <div class="div-line"></div>
-      <div class="minutes">${chips}</div>
-    </div>`;
-  }
-  cont.innerHTML=hasAny?html:`<div class="no-bus">該当する便がありません</div>`;
-}
-
-// PWA Service Worker登録
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
-  });
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
-// Init
 setDay(autoDay());
-setStop('north');
 updateClock();
-setInterval(()=>{updateClock();render();},10000);
+setInterval(()=>{updateClock();render();},1000);
 </script>
 </body>
 </html>
